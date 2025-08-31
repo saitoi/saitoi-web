@@ -35,13 +35,20 @@ grammar md-to-html {
 
 class md-to-html-actions {
     method TOP ($/) { make $<page> }
-    method page ($/) { make $html-boilerplate-upper ~ $<header>.made ~ $<body>.made ~ $html-boilerplate-lower }
+    method page ($/) {
+        make qq:to/END/;
+            {$html-boilerplate-upper}
+              {$<header>.made}
+              {$<body>.made}
+            {$html-boilerplate-lower}
+            END
+    }
     method header ($/) {
         my $level = $0.chars;
         make "<h{$level}>{$<line>.Str}</h{$level}>";
     }
     method body ($/)       { make $<paragraph>.map(*.made).join("\n") }
-    method paragraph ($/)  { make "<p>\n{$<line>.map("  " ~ *.made).join("\n")}\n</p>" }
+    method paragraph ($/)  { make "<p>\n{$<line>.map("  " ~ *.made).join("<br>")}\n</p>" }
     method line ($/)       { make $<word>.map(*.made).join(' ') }
     # proto methods
     method word:sym<bold>    ($/) { make "<strong>{$<word>.made}</strong>" }
