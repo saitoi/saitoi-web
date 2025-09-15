@@ -1,0 +1,11 @@
+# Hello
+This is a paragraph
+This is also inside the same pg
+This is *bold*
+This is an `inline` `code`
+
+`This an inline line`
+**This is an italic line**
+*This is a bold line*
+
+This is another paragraph and **italic**
