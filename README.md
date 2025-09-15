@@ -3,7 +3,7 @@
 - [ ] Tags: \<tag1\> \<tag2\> ...
 - [ ] Localização: Acima do subtitle.
 - [ ] Subtítulo: Assim como headers normais.
-- [  ] Código inline.
+- [x] Código inline.
 - [x] Palavra com código inline.
 - [ ] Blocos de código com ```bloco```.
 - [ ] Imagens.

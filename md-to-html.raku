@@ -28,8 +28,9 @@ grammar md-to-html {
 
     proto token line              { * }
           token line:sym<default> { <word>+ %% \h+ }
-          token line:sym<italic>  { <word:sym<italic>>+ %% \h+ }      
-          token line:sym<icode>  { <word:sym<code>>+ %% \h+ }      
+          token line:sym<bold>    { '*' <word:sym<bold>>+ %% \h+ '*' }      
+          token line:sym<italic>  { '**' <word:sym<italic>>+ %% \h+ '**' }      
+          token line:sym<icode>   { '`' <word:sym<code>>+ %% \h+ '`' }
 
     proto token word              { * }
           token word:sym<bold>    { '*' <word:sym<default>> '*' }
@@ -41,8 +42,7 @@ grammar md-to-html {
 class md-to-html-actions {
     method TOP ($/) { make $<page> }
     method page ($/) {
-        make qq:to/END/;
-            {$html-boilerplate-upper}
+        make qq:to/END/; {$html-boilerplate-upper}
               {$<header>.made}
               {$<body>.made}
             {$html-boilerplate-lower}
@@ -56,8 +56,9 @@ class md-to-html-actions {
     method paragraph ($/)  { make "<p>\n{$<line>.map("  " ~ *.made).join("<br>")}\n</p>" }
 
     method line:sym<default> ($/) { make $<word>.map(*.made).join(' ') }
-    method line:sym<italic> ($/)  { make $<word>.map(*.made).join(' ') }
-    method line:sym<icode> ($/)  { make $<word>.map(*.made).join(' ') }
+    method line:sym<bold>    ($/) { make "<strong>" ~ $<word>.map(*.made).join(' ') ~ "</strong>" }
+    method line:sym<italic>  ($/) { make "<em>" ~ $<word>.map(*.made).join(' ') ~ "</em>" }
+    method line:sym<icode>   ($/) { make "<code>" ~ $<word>.map(*.made).join(' ') ~ "</code>" }
 
     # proto methods
     method word:sym<bold>    ($/) { make "<strong>{$<word>.made}</strong>" }
@@ -73,6 +74,10 @@ This is a paragraph
 This is also inside the same pg
 This is *bold*
 This is an `inline` `code`
+
+`This an inline line`
+**This is an italic line**
+*This is a bold line*
 
 This is another paragraph and **italic**
 END
