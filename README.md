@@ -1,14 +1,15 @@
 # Features a serem acrescentadas
 
-- [ ] Tags: \<tag1\> \<tag2\> ...
+- [x] Tags: \<tag1\> \<tag2\> ...
 - [ ] Localização: Acima do subtitle.
-- [ ] Subtítulo: Assim como headers normais.
+- [ ] Diferenciar subtítulos.
 - [x] Código inline.
 - [x] Palavra com código inline.
 - [ ] Blocos de código com ```bloco```.
 - [ ] Imagens.
 - [ ] Footnote.
 - [ ] Divisores.
+- [ ] Colunas.
 
 # Estrutura desejada
 
