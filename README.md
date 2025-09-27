@@ -6,7 +6,7 @@
 - [x] Código inline.
 - [x] Palavra com código inline.
 - [x] Blocos de código com ```bloco```.
-- [ ] Imagens.
+- [x] Imagens (paragraph).
 - [ ] Footnote.
 - [ ] Divisores.
 - [ ] Colunas.
