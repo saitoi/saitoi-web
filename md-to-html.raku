@@ -30,10 +30,12 @@ grammar md-to-html {
     token header     { (<[#]>+) \h+ <line> }
     token body       { <paragraph>+ %% \n+ }
     token tag        { [ '<' <word:sym<default>> '>' \h* ]* }
+    token digit      { \d+ }
 
     proto token paragraph              { * }
           token paragraph:sym<default> { <line:sym<default>>+ %% \n }
           token paragraph:sym<code>    { '```' \n <line:sym<default>>+ %% \n \n? '```' }
+          token paragraph:sym<image>   { '![' $<alt>=[ <-[\]]>+ ] ']' '(' $<src>=[ <-[)]>+ ] ')' [ '{' \h* 'width=' <word> \h* 'height=' \h* <word> \h* '}' ]? \h* }
 
     proto token line              { * }
           token line:sym<default> { <word>+ %% \h+ }
@@ -61,12 +63,19 @@ class md-to-html-actions {
         my $level = $0.chars;
         make "<h{$level}>{$<line>.Str}</h{$level}>";
     }
-    method body ($/)       { make $<paragraph>.map(*.made).join("\n") }
-    method tag  ($/)       { make $<word>.map(*.made).join(", ") }
+    method body  ($/)       { make $<paragraph>.map(*.made).join("\n") }
+    method tag   ($/)       { make $<word>.map(*.made).join(", ") }
+    method digit ($/)       { make ~$/ }
 
     # proto methods
-    method paragraph:sym<default> ($/)  { make "<p>\n{$<line>.map("  " ~ *.made).join("<br>\n")}\n  </p>" }
-    method paragraph:sym<code>    ($/)  { make "<pre><code>\n{$<line>.map("  " ~ *.made).join("<br>\n")}\n</code></pre>" }
+    method paragraph:sym<default> ($/) { make "<p>\n{$<line>.map("  " ~ *.made).join("<br>\n")}\n  </p>" }
+    method paragraph:sym<code>    ($/) { make "<pre><code>\n{$<line>.map("  " ~ *.made).join("<br>\n")}\n</code></pre>" }
+    method paragraph:sym<image>   ($/) {
+        my $alt = ~$<alt>;
+        my $src = ~$<src>;
+        my $attrs = $<word> ?? qq[ width="{$<word>[0].made}" height="{$<word>[1].made}"] !! '';
+        make qq[<img src="$src" alt="$alt"$attrs>];
+    }
 
     method line:sym<default> ($/) { make $<word>.map(*.made).join(' ') }
     method line:sym<bold>    ($/) { make "<strong>" ~ $<word>.map(*.made).join(' ') ~ "</strong>" }

@@ -11,6 +11,8 @@ isso daqui
 e um bloco de codigo
 ```
 
+![Duck image](./duck.jpg){ width=300px height=300px }
+
 `This an inline line`
 **This is an italic line**
 *This is a bold line*
