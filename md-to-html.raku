@@ -35,6 +35,7 @@ grammar md-to-html {
     proto token paragraph              { * }
           token paragraph:sym<default> { <line:sym<default>>+ %% \n }
           token paragraph:sym<code>    { '```' \n <line:sym<default>>+ %% \n \n? '```' }
+          token paragraph:sym<divisor> { '---' \h* }
           token paragraph:sym<image>   { '![' $<alt>=[ <-[\]]>+ ] ']' '(' $<src>=[ <-[)]>+ ] ')' [ '{' \h* 'width=' <word> \h* 'height=' \h* <word> \h* '}' ]? \h* }
 
     proto token line              { * }
@@ -70,6 +71,7 @@ class md-to-html-actions {
     # proto methods
     method paragraph:sym<default> ($/) { make "<p>\n{$<line>.map("  " ~ *.made).join("<br>\n")}\n  </p>" }
     method paragraph:sym<code>    ($/) { make "<pre><code>\n{$<line>.map("  " ~ *.made).join("<br>\n")}\n</code></pre>" }
+    method paragraph:sym<divisor> ($/) { make "<hr>" }
     method paragraph:sym<image>   ($/) {
         my $alt = ~$<alt>;
         my $src = ~$<src>;

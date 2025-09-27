@@ -8,8 +8,9 @@
 - [x] Blocos de código com ```bloco```.
 - [x] Imagens (paragraph).
 - [ ] Footnote.
-- [ ] Divisores.
+- [x] Divisores.
 - [ ] Colunas.
+- [ ] CSS padrão.
 
 # Estrutura desejada
 
