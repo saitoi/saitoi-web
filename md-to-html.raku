@@ -28,12 +28,12 @@ grammar md-to-html {
     token TOP        { ^ <page> $ }
     token page       { <header> \n ** 2 <tag> \n+ <body> }
     token header     { (<[#]>+) \h+ <line> }
-    token body       { <paragraph>+ %% \n }
+    token body       { <paragraph>+ %% \n+ }
     token tag        { [ '<' <word:sym<default>> '>' \h* ]* }
 
     proto token paragraph              { * }
           token paragraph:sym<default> { <line:sym<default>>+ %% \n }
-          token paragraph:sym<code>    { '```' \n <line:sym<default>>+ %% \n '```' }
+          token paragraph:sym<code>    { '```' \n <line:sym<default>>+ %% \n \n? '```' }
 
     proto token line              { * }
           token line:sym<default> { <word>+ %% \h+ }
@@ -65,8 +65,8 @@ class md-to-html-actions {
     method tag  ($/)       { make $<word>.map(*.made).join(", ") }
 
     # proto methods
-    method paragraph:sym<default> ($/)  { make "<p>\n{$<line>.map("  " ~ *.made).join("<br>")}\n</p>" }
-    method paragraph:sym<code>    ($/)  { make "<pre><code>\n{$<line>.map("  " ~ *.made).join("<br>")}\n</code></pre>" }
+    method paragraph:sym<default> ($/)  { make "<p>\n{$<line>.map("  " ~ *.made).join("<br>\n")}\n  </p>" }
+    method paragraph:sym<code>    ($/)  { make "<pre><code>\n{$<line>.map("  " ~ *.made).join("<br>\n")}\n</code></pre>" }
 
     method line:sym<default> ($/) { make $<word>.map(*.made).join(' ') }
     method line:sym<bold>    ($/) { make "<strong>" ~ $<word>.map(*.made).join(' ') ~ "</strong>" }

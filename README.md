@@ -5,7 +5,7 @@
 - [ ] Diferenciar subtítulos.
 - [x] Código inline.
 - [x] Palavra com código inline.
-- [ ] Blocos de código com ```bloco```.
+- [x] Blocos de código com ```bloco```.
 - [ ] Imagens.
 - [ ] Footnote.
 - [ ] Divisores.
