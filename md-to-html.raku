@@ -33,9 +33,10 @@ grammar md-to-html {
     token digit      { \d+ }
 
     proto token paragraph              { * }
-          token paragraph:sym<default> { <line:sym<default>>+ %% \n }
+          token paragraph:sym<default> { <line>+ %% \n }
           token paragraph:sym<code>    { '```' \n <line:sym<default>>+ %% \n \n? '```' }
           token paragraph:sym<divisor> { '---' \h* }
+          token paragraph:sym<columns> { [ '{' <paragraph:sym<default>> '}' ]+ %% [\h* \n | \h*] }
           token paragraph:sym<image>   { '![' $<alt>=[ <-[\]]>+ ] ']' '(' $<src>=[ <-[)]>+ ] ')' [ '{' \h* 'width=' <word> \h* 'height=' \h* <word> \h* '}' ]? \h* }
 
     proto token line              { * }
@@ -48,6 +49,7 @@ grammar md-to-html {
           token word:sym<bold>    { '*' <word:sym<default>> '*' }
           token word:sym<italic>  { '**' <word:sym<default>> '**' }
           token word:sym<code>    { '`' <word:sym<default>> '`' }
+          token word:sym<link>    { '[' $<desc>=[ <-[\]]>+ ] ']' '(' $<src>=[ <-[)]>+ ] ')' }
           token word:sym<default> { \w+ }
 }
 
@@ -70,12 +72,13 @@ class md-to-html-actions {
 
     # proto methods
     method paragraph:sym<default> ($/) { make "<p>\n{$<line>.map("  " ~ *.made).join("<br>\n")}\n  </p>" }
-    method paragraph:sym<code>    ($/) { make "<pre><code>\n{$<line>.map("  " ~ *.made).join("<br>\n")}\n</code></pre>" }
+    method paragraph:sym<code>    ($/) { make "<pre><code>\n{$<line>.map("  " ~ *.made).join("\n")}\n</code></pre>" }
     method paragraph:sym<divisor> ($/) { make "<hr>" }
+    method paragraph:sym<columns> ($/) { make "<table>\n<tr>\n" ~ $<paragraph>.map("<td>" ~ *.made ~ "</td>").join('\n') ~ "\n</tr>\n</table>" }
     method paragraph:sym<image>   ($/) {
-        my $alt = ~$<alt>;
-        my $src = ~$<src>;
-        my $attrs = $<word> ?? qq[ width="{$<word>[0].made}" height="{$<word>[1].made}"] !! '';
+        my Str $alt = ~$<alt>;
+        my Str $src = ~$<src>;
+        my Str $attrs = $<word> ?? qq[ width="{$<word>[0].made}" height="{$<word>[1].made}"] !! '';
         make qq[<img src="$src" alt="$alt"$attrs>];
     }
 
@@ -87,6 +90,11 @@ class md-to-html-actions {
     method word:sym<bold>    ($/) { make "<strong>{$<word>.made}</strong>" }
     method word:sym<italic>  ($/) { make "<em>{$<word>.made}</em>" }
     method word:sym<code>    ($/) { make "<code>{$<word>.made}</code>" }
+    method word:sym<link>    ($/) {
+        my Str $desc = ~$<desc>;
+        my Str $src = ~$<src>;
+        make qq[<a href="{$src}">{$desc}</a>];
+    }
     method word:sym<default> ($/) { make ~$/ }
 }
 

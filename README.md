@@ -7,10 +7,12 @@
 - [x] Palavra com código inline.
 - [x] Blocos de código com ```bloco```.
 - [x] Imagens (paragraph).
+- [x] Links.
 - [ ] Footnote.
 - [x] Divisores.
-- [ ] Colunas.
+- [x] Colunas.
 - [ ] CSS padrão.
+- [ ] Modularizar.
 
 # Estrutura desejada
 
