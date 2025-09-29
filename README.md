@@ -1,4 +1,4 @@
-# Features a serem acrescentadas
+# Features
 
 - [x] Tags: \<tag1\> \<tag2\> ...
 - [ ] Localização: Acima do subtitle.
@@ -12,9 +12,13 @@
 - [x] Divisores.
 - [x] Colunas.
 - [ ] CSS padrão.
-- [ ] Modularizar.
+- [x] Modularizar.
+- [ ] CLI commands:
+    - [ ] verbose (v)
+    - [ ] deploy (d)
+    - [ ] build (d)
 
-# Estrutura desejada
+# Structure
 
 ```txt
 saitoi-web
