@@ -22,15 +22,16 @@ END
 }
 
 sub MAIN(
-    :v(:$verbose) = False,
-    :t(:$test) = False,
+    Bool :v(:$verbose) = False,
+    Bool :t(:$test) = False,
 ) {
     if $test {
+        my &output = -> Match $f { $verbose ?? $f<page>.made !! qq[Success!!] };
         "t".IO.dir(:recursive)
             ==> grep(*.f && *.extension eq qq[md])
             ==> map({ $_.slurp })
             ==> map({ My::Grammar.parse($_, actions => My::Actions.new) })
-            ==> map({ say $_ ?? qq[Success!!] !! qq[Parse failed..] })
+            ==> map({ say $_ ?? &output($_) !! qq[Parse failed..] })
     }
 }
 
