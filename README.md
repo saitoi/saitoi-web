@@ -1,8 +1,9 @@
 # Features
 
 - [x] Tags: \<tag1\> \<tag2\> ...
-- [ ] Localização: Acima do subtitle.
+- [ ] Dockerfile.
 - [ ] Diferenciar subtítulos.
+- [ ] Homepage, About, Index Blog Posts.
 - [x] Código inline.
 - [x] Palavra com código inline.
 - [x] Blocos de código com ```bloco```.
@@ -11,7 +12,7 @@
 - [ ] Footnote.
 - [x] Divisores.
 - [x] Colunas.
-- [ ] CSS padrão.
+- [ ] CSS.
 - [x] Modularizar.
 - [ ] CLI commands:
     - [ ] verbose (v)
