@@ -1,6 +1,7 @@
 # Features
 
 - [x] Tags: \<tag1\> \<tag2\> ...
+- [ ] Habilidade de testar um arquivo específico, passando o nome como argumento. Pode ser um `multi` da MAIN
 - [ ] Dockerfile.
 - [ ] Diferenciar subtítulos.
 - [ ] Homepage, About, Index Blog Posts.
